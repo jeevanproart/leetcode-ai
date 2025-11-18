@@ -3,23 +3,28 @@
  */
 export const VALID_MODELS = [
   {
-    model: 'gpt-3.5-turbo',
-    name: 'openai_3.5_turbo',
-    display: 'GPT-3.5 Turbo',
+    model: 'gemini-2.5-flash',
+    name: 'gemini_2_5_flash',
+    display: 'Gemini 2.5 Flash',
   },
   {
-    model: 'gpt-4o',
-    name: 'openai_4o',
-    display: 'GPT-4 Optimized',
+    model: 'gemini-2.5-pro',
+    name: 'gemini_2_5_pro',
+    display: 'Gemini 2.5 Pro',
   },
   {
-    model: 'gemini-1.5-pro-latest',
-    name: 'gemini_1.5_pro',
-    display: 'Gemini 1.5 Pro (Latest)',
+    model: 'gemini-1.5-pro',
+    name: 'gemini_1_5_pro',
+    display: 'Gemini 1.5 Pro',
+  },
+  {
+    model: 'gemini-1.5-flash',
+    name: 'gemini_1_5_flash',
+    display: 'Gemini 1.5 Flash',
   },
 ]
 
 /**
  * Type of valid models that can be used in the application.
  */
-export type ValidModel = 'openai_3.5_turbo' | 'openai_4o' | 'gemini_1.5_pro'
+export type ValidModel = 'gemini_2_5_flash' | 'gemini_2_5_pro' | 'gemini_1_5_pro' | 'gemini_1_5_flash'

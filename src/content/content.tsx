@@ -525,29 +525,49 @@ const ContentPage: React.FC = () => {
       document.removeEventListener('click', handleDocumentClick)
     }
   }, [])
-  ;(async () => {
-    const { getKeyModel, selectModel } = useChromeStorage()
-    const { model, apiKey } = await getKeyModel(await selectModel())
 
-    setModal(model)
-    setApiKey(apiKey)
-  })()
-
-  const heandelModel = (v: ValidModel) => {
+  const heandelModel = async (v: ValidModel) => {
     if (v) {
-      const { setSelectModel } = useChromeStorage()
-      setSelectModel(v)
+      const { setSelectModel, getKeyModel } = useChromeStorage()
+      await setSelectModel(v)
       setSelectedModel(v)
+      const { model, apiKey } = await getKeyModel(v)
+      setModal(model)
+      setApiKey(apiKey)
     }
   }
 
   React.useEffect(() => {
     const loadChromeStorage = async () => {
-      if (!chrome) return
+      try {
+        if (!chrome) return
 
-      const { selectModel } = useChromeStorage()
-
-      setSelectedModel(await selectModel())
+        const { getKeyModel, selectModel } = useChromeStorage()
+        const selectedModelValue = await selectModel()
+        
+        // Check if the selected model is still valid
+        const isValidModel = selectedModelValue && VALID_MODELS.some(m => m.name === selectedModelValue)
+        
+        if (selectedModelValue && isValidModel) {
+          setSelectedModel(selectedModelValue)
+          const { model, apiKey } = await getKeyModel(selectedModelValue)
+          setModal(model)
+          setApiKey(apiKey)
+        } else {
+          // If no model selected or invalid model, set default to Gemini
+          const defaultModel: ValidModel = 'gemini_2_5_flash'
+          setSelectedModel(defaultModel)
+          const { model, apiKey } = await getKeyModel(defaultModel)
+          setModal(model)
+          setApiKey(apiKey)
+        }
+      } catch (error) {
+        console.error('Error loading chrome storage:', error)
+        // Ensure button is still visible even on error
+        setSelectedModel(undefined)
+        setModal(null)
+        setApiKey(null)
+      }
     }
 
     loadChromeStorage()
@@ -636,6 +656,8 @@ const ContentPage: React.FC = () => {
         <Button
           size={'icon'}
           onClick={() => setChatboxExpanded(!chatboxExpanded)}
+          className="bg-primary hover:bg-primary/90 shadow-lg"
+          style={{ zIndex: 9999 }}
         >
           <Bot />
         </Button>

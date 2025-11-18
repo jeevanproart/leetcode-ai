@@ -134,12 +134,12 @@ const Popup: React.FC = () => {
             </div>
             <div className="space-y-2">
               <label htmlFor="text" className="text-xs text-muted-foreground">
-                API Key {model ? `for ${model}` : ''}
+                Gemini API Key
               </label>
               <HideApiKey
                 value={apikey || ''}
                 onChange={(e) => setApikey(e.target.value)}
-                placeholder="Enter OpenAI API Key"
+                placeholder="Enter Gemini API Key"
                 disabled={!model}
                 required
               />
